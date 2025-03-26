@@ -6,6 +6,8 @@
 
 A powerful MCP server for Google search that enables parallel searching with multiple keywords simultaneously.
 
+> This project is modified from [google-search](https://github.com/web-agent-master/google-search).
+
 ## Advantages
 
 - **Parallel Searching**: Supports searching with multiple keywords on Google simultaneously, improving search efficiency
