@@ -1,6 +1,7 @@
 import { MultiSearchResponse, SearchOptions } from "../types/index.js";
 import { multiGoogleSearch } from "../services/googleSearch.js";
 import { isDebugMode } from "../index.js";
+import { logger } from "../utils/logger.js";
 
 /**
  * Tool definition for g_search
@@ -55,7 +56,7 @@ export async function searchGoogle(args: any) {
   const queries = args?.queries || [];
   
   if (!Array.isArray(queries) || queries.length === 0) {
-    console.error(`[Error] At least one search query is required`);
+    logger.error(`[Error] At least one search query is required`);
     throw new Error("At least one search query is required");
   }
 
@@ -68,13 +69,13 @@ export async function searchGoogle(args: any) {
   };
 
   // Log search parameters
-  console.info(`[SearchGoogle] Starting search for ${queries.length} queries with options: ${JSON.stringify(options)}`);
-  console.info(`[SearchGoogle] Debug mode: ${options.debug ? 'enabled' : 'disabled'} (from CLI flag: ${isDebugMode})`);
+  logger.info(`[SearchGoogle] Starting search for ${queries.length} queries with options: ${JSON.stringify(options)}`);
+  logger.info(`[SearchGoogle] Debug mode: ${options.debug ? 'enabled' : 'disabled'} (from CLI flag: ${isDebugMode})`);
 
   try {
     const results = await multiGoogleSearch(queries, options);
     
-    console.info(`[SearchGoogle] Search completed successfully for ${results.length} queries`);
+    logger.info(`[SearchGoogle] Search completed successfully for ${results.length} queries`);
     
     // Format the response
     const response: MultiSearchResponse = {
@@ -88,7 +89,7 @@ export async function searchGoogle(args: any) {
       }]
     };
   } catch (error) {
-    console.error(`[SearchGoogle] Error during search: ${error}`);
+    logger.error(`[SearchGoogle] Error during search: ${error}`);
     throw error;
   }
 } 

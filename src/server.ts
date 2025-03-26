@@ -4,6 +4,7 @@ import {
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import { tools, toolHandlers } from './tools/index.js';
+import { logger } from "./utils/logger.js";
 
 export function createServer() {
   const server = new Server(
@@ -19,7 +20,7 @@ export function createServer() {
   );
 
   server.setRequestHandler(ListToolsRequestSchema, async () => {
-    console.info("[Tools] List available tools");
+    logger.info("[Tools] List available tools");
     return {
       tools
     };
@@ -34,6 +35,7 @@ export function createServer() {
     const handler = toolHandlers[toolName];
     
     if (!handler) {
+      logger.error(`[Error] Unknown tool: ${toolName}`);
       throw new Error(`Unknown tool: ${toolName}`);
     }
     
