@@ -15,7 +15,7 @@ export const isDebugMode = process.argv.includes("--debug");
  * Start the server
  */
 async function main() {
-  console.error("[Setup] Initializing Google Search MCP server...");
+  console.info("[Setup] Initializing Google Search MCP server...");
 
   if (isDebugMode) {
     console.error(
@@ -26,7 +26,7 @@ async function main() {
   const server = createServer();
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("[Setup] Server started");
+  console.info("[Setup] Server started");
 }
 
 main().catch((error) => {

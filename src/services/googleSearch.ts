@@ -119,7 +119,7 @@ export async function googleSearch(
   // Always use headless mode unless debug is enabled
   let useHeadless = !options.debug;
 
-  console.error("[GoogleSearch] Initializing browser...");
+  console.info("[GoogleSearch] Initializing browser...");
 
   // Check if state file exists
   let storageState: string | undefined = undefined;
@@ -129,7 +129,7 @@ export async function googleSearch(
   const fingerprintFile = stateFile.replace(".json", "-fingerprint.json");
 
   if (fs.existsSync(stateFile)) {
-    console.error(
+    console.info(
       `[GoogleSearch] Found browser state file, will use saved browser state to avoid bot detection`
     );
     storageState = stateFile;
@@ -139,13 +139,13 @@ export async function googleSearch(
       try {
         const fingerprintData = fs.readFileSync(fingerprintFile, "utf8");
         savedState = JSON.parse(fingerprintData);
-        console.error("[GoogleSearch] Loaded saved browser fingerprint configuration");
+        console.info("[GoogleSearch] Loaded saved browser fingerprint configuration");
       } catch (e) {
-        console.error("[GoogleSearch] Cannot load fingerprint file, will create new fingerprint");
+        console.warn("[GoogleSearch] Cannot load fingerprint file, will create new fingerprint");
       }
     }
   } else {
-    console.error(
+    console.info(
       `[GoogleSearch] No browser state file found, will create new browser session and fingerprint`
     );
   }
@@ -207,9 +207,9 @@ export async function googleSearch(
     if (existingBrowser) {
       browser = existingBrowser;
       browserWasProvided = true;
-      console.error("[GoogleSearch] Using existing browser instance");
+      console.info("[GoogleSearch] Using existing browser instance");
     } else {
-      console.error(
+      console.info(
         `[GoogleSearch] Preparing to launch browser in ${headless ? "headless" : "non-headless"} mode...`
       );
 
@@ -247,7 +247,7 @@ export async function googleSearch(
         ignoreDefaultArgs: ["--enable-automation"],
       });
 
-      console.error("[GoogleSearch] Browser launched successfully!");
+      console.info("[GoogleSearch] Browser launched successfully!");
     }
 
     // Get device config - use saved or randomly generate
@@ -268,14 +268,14 @@ export async function googleSearch(
         reducedMotion: savedState.fingerprint.reducedMotion,
         forcedColors: savedState.fingerprint.forcedColors,
       };
-      console.error("[GoogleSearch] Using saved browser fingerprint configuration");
+      console.info("[GoogleSearch] Using saved browser fingerprint configuration");
     } else {
       // Get host machine's actual settings
       const hostConfig = getHostMachineConfig(locale);
 
       // If we need to use a different device type, get device config again
       if (hostConfig.deviceName !== deviceName) {
-        console.error(
+        console.info(
           `[GoogleSearch] Using device type based on host machine settings: ${hostConfig.deviceName}`
         );
         // Use new device config
@@ -293,7 +293,7 @@ export async function googleSearch(
 
       // Save new generated fingerprint config
       savedState.fingerprint = hostConfig;
-      console.error(
+      console.info(
         `[GoogleSearch] Generated new browser fingerprint config based on host machine: locale=${hostConfig.locale}, timezone=${hostConfig.timezoneId}, colorScheme=${hostConfig.colorScheme}, deviceType=${hostConfig.deviceName}`
       );
     }
@@ -309,7 +309,7 @@ export async function googleSearch(
     };
 
     if (storageState) {
-      console.error("[GoogleSearch] Loading saved browser state...");
+      console.info("[GoogleSearch] Loading saved browser state...");
     }
 
     const context = await browser.newContext(
@@ -370,16 +370,16 @@ export async function googleSearch(
       let selectedDomain: string;
       if (savedState.googleDomain) {
         selectedDomain = savedState.googleDomain;
-        console.error(`[GoogleSearch] Using saved Google domain: ${selectedDomain}`);
+        console.info(`[GoogleSearch] Using saved Google domain: ${selectedDomain}`);
       } else {
         selectedDomain =
           googleDomains[Math.floor(Math.random() * googleDomains.length)];
         // Save selected domain
         savedState.googleDomain = selectedDomain;
-        console.error(`[GoogleSearch] Randomly selected Google domain: ${selectedDomain}`);
+        console.info(`[GoogleSearch] Randomly selected Google domain: ${selectedDomain}`);
       }
 
-      console.error("[GoogleSearch] Visiting Google search page...");
+      console.info("[GoogleSearch] Visiting Google search page...");
 
       // Visit Google search page
       const response = await page.goto(selectedDomain, {
@@ -405,7 +405,7 @@ export async function googleSearch(
 
       if (isBlockedPage) {
         if (headless) {
-          console.error("[GoogleSearch] CAPTCHA detected, will restart browser in non-headless mode...");
+          console.warn("[GoogleSearch] CAPTCHA detected, will restart browser in non-headless mode...");
 
           // Close current page and context
           await page.close();
@@ -413,7 +413,7 @@ export async function googleSearch(
 
           // If it's an externally provided browser, don't close it but create a new browser instance
           if (browserWasProvided) {
-            console.error(
+            console.warn(
               "[GoogleSearch] CAPTCHA detected with external browser instance, creating new browser instance..."
             );
             // Create a new browser instance, no longer use the externally provided one
@@ -474,7 +474,7 @@ export async function googleSearch(
             return performSearch(false); // Re-perform search in non-headless mode
           }
         } else {
-          console.error("[GoogleSearch] CAPTCHA detected, please complete verification in browser...");
+          console.warn("[GoogleSearch] CAPTCHA detected, please complete verification in browser...");
           // Wait for user to complete verification and redirect back to search page
           await page.waitForNavigation({
             timeout: timeout * 2,
@@ -485,11 +485,11 @@ export async function googleSearch(
               );
             },
           });
-          console.error("[GoogleSearch] CAPTCHA verification completed, continuing with search...");
+          console.info("[GoogleSearch] CAPTCHA verification completed, continuing with search...");
         }
       }
 
-      console.error(`[GoogleSearch] Entering search keyword: ${query}`);
+      console.info(`[GoogleSearch] Entering search keyword: ${query}`);
 
       // Wait for search box to appear - try multiple possible selectors
       const searchInputSelectors = [
@@ -506,7 +506,7 @@ export async function googleSearch(
       for (const selector of searchInputSelectors) {
         searchInput = await page.$(selector);
         if (searchInput) {
-          console.error(`[GoogleSearch] Found search box with selector: ${selector}`);
+          console.info(`[GoogleSearch] Found search box with selector: ${selector}`);
           break;
         }
       }
@@ -526,7 +526,7 @@ export async function googleSearch(
       await page.waitForTimeout(getRandomDelay(100, 300));
       await page.keyboard.press("Enter");
 
-      console.error("[GoogleSearch] Waiting for page to load...");
+      console.info("[GoogleSearch] Waiting for page to load...");
 
       // Wait for page to fully load
       await page.waitForLoadState("networkidle", { timeout });
@@ -539,7 +539,7 @@ export async function googleSearch(
 
       if (isBlockedAfterSearch) {
         if (headless) {
-          console.error(
+          console.warn(
             "[GoogleSearch] CAPTCHA detected after search, will restart browser in non-headless mode..."
           );
 
@@ -549,7 +549,7 @@ export async function googleSearch(
 
           // If it's an externally provided browser, don't close it but create a new browser instance
           if (browserWasProvided) {
-            console.error(
+            console.warn(
               "[GoogleSearch] CAPTCHA detected after search with external browser instance, creating new browser instance..."
             );
             // Create a new browser instance, no longer use the externally provided one
@@ -610,7 +610,7 @@ export async function googleSearch(
             return performSearch(false); // Re-perform search in non-headless mode
           }
         } else {
-          console.error("[GoogleSearch] CAPTCHA detected after search, please complete verification in browser...");
+          console.warn("[GoogleSearch] CAPTCHA detected after search, please complete verification in browser...");
           // Wait for user to complete verification and redirect back to search page
           await page.waitForNavigation({
             timeout: timeout * 2,
@@ -621,14 +621,14 @@ export async function googleSearch(
               );
             },
           });
-          console.error("[GoogleSearch] CAPTCHA verification completed, continuing with search...");
+          console.info("[GoogleSearch] CAPTCHA verification completed, continuing with search...");
 
           // Wait for page to reload
           await page.waitForLoadState("networkidle", { timeout });
         }
       }
 
-      console.error(`[GoogleSearch] Waiting for search results to load... URL: ${page.url()}`);
+      console.info(`[GoogleSearch] Waiting for search results to load... URL: ${page.url()}`);
 
       // Try multiple possible search result selectors
       const searchResultSelectors = [
@@ -643,7 +643,7 @@ export async function googleSearch(
       for (const selector of searchResultSelectors) {
         try {
           await page.waitForSelector(selector, { timeout: timeout / 2 });
-          console.error(`[GoogleSearch] Found search results with selector: ${selector}`);
+          console.info(`[GoogleSearch] Found search results with selector: ${selector}`);
           resultsFound = true;
           break;
         } catch (e) {
@@ -660,7 +660,7 @@ export async function googleSearch(
 
         if (isBlockedDuringResults) {
           if (headless) {
-            console.error(
+            console.warn(
               "[GoogleSearch] CAPTCHA detected while waiting for results, will restart browser in non-headless mode..."
             );
 
@@ -670,7 +670,7 @@ export async function googleSearch(
 
             // If it's an externally provided browser, don't close it but create a new browser instance
             if (browserWasProvided) {
-              console.error(
+              console.warn(
                 "[GoogleSearch] CAPTCHA detected while waiting for results with external browser instance, creating new browser instance..."
               );
               // Create a new browser instance, no longer use the externally provided one
@@ -731,7 +731,7 @@ export async function googleSearch(
               return performSearch(false); // Re-perform search in non-headless mode
             }
           } else {
-            console.error(
+            console.warn(
               "[GoogleSearch] CAPTCHA detected while waiting for results, please complete verification in browser..."
             );
             // Wait for user to complete verification and redirect back to search page
@@ -744,13 +744,13 @@ export async function googleSearch(
                 );
               },
             });
-            console.error("[GoogleSearch] CAPTCHA verification completed, continuing with search...");
+            console.info("[GoogleSearch] CAPTCHA verification completed, continuing with search...");
 
             // Try again to wait for search results
             for (const selector of searchResultSelectors) {
               try {
                 await page.waitForSelector(selector, { timeout: timeout / 2 });
-                console.error(`[GoogleSearch] Found search results after verification with selector: ${selector}`);
+                console.info(`[GoogleSearch] Found search results after verification with selector: ${selector}`);
                 resultsFound = true;
                 break;
               } catch (e) {
@@ -773,7 +773,7 @@ export async function googleSearch(
       // Reduce wait time
       await page.waitForTimeout(getRandomDelay(200, 500));
 
-      console.error("[GoogleSearch] Extracting search results...");
+      console.info("[GoogleSearch] Extracting search results...");
 
       // Extract search results - try multiple selector combinations
       const resultSelectors = [
@@ -839,7 +839,7 @@ export async function googleSearch(
           );
 
           if (results.length > 0) {
-            console.error(`[GoogleSearch] Successfully extracted results with selector: ${selector.container}`);
+            console.info(`[GoogleSearch] Successfully extracted results with selector: ${selector.container}`);
             break;
           }
         } catch (e) {
@@ -849,7 +849,7 @@ export async function googleSearch(
 
       // If all selectors fail, try a more generic method
       if (results.length === 0) {
-        console.error("[GoogleSearch] Using fallback method to extract search results...");
+        console.warn("[GoogleSearch] Using fallback method to extract search results...");
         results = await page.$$eval(
           "a[href^='http']",
           (elements: Element[], maxResults: number) => {
@@ -893,12 +893,12 @@ export async function googleSearch(
         );
       }
 
-      console.error(`[GoogleSearch] Successfully retrieved search results: ${results.length} items`);
+      console.info(`[GoogleSearch] Successfully retrieved search results: ${results.length} items`);
 
       try {
         // Save browser state (unless user specified not to)
         if (!noSaveState) {
-          console.error(`[GoogleSearch] Saving browser state...`);
+          console.info(`[GoogleSearch] Saving browser state...`);
 
           // Ensure directory exists
           const stateDir = path.dirname(stateFile);
@@ -908,7 +908,7 @@ export async function googleSearch(
 
           // Save state
           await context.storageState({ path: stateFile });
-          console.error("[GoogleSearch] Browser state saved successfully!");
+          console.info("[GoogleSearch] Browser state saved successfully!");
 
           // Save fingerprint config
           try {
@@ -917,12 +917,12 @@ export async function googleSearch(
               JSON.stringify(savedState, null, 2),
               "utf8"
             );
-            console.error(`[GoogleSearch] Fingerprint configuration saved`);
+            console.info(`[GoogleSearch] Fingerprint configuration saved`);
           } catch (fingerprintError) {
             console.error(`[GoogleSearch] Error saving fingerprint configuration: ${fingerprintError}`);
           }
         } else {
-          console.error("[GoogleSearch] Not saving browser state as per user setting");
+          console.info("[GoogleSearch] Not saving browser state as per user setting");
         }
       } catch (error) {
         console.error(`[GoogleSearch] Error saving browser state: ${error}`);
@@ -930,10 +930,10 @@ export async function googleSearch(
 
       // Only close browser if it's not externally provided and not in debug mode
       if (!browserWasProvided && !options.debug) {
-        console.error("[GoogleSearch] Closing browser...");
+        console.info("[GoogleSearch] Closing browser...");
         await browser.close();
       } else {
-        console.error("[GoogleSearch] Keeping browser instance open");
+        console.info("[GoogleSearch] Keeping browser instance open");
       }
 
       // Return search results
@@ -947,7 +947,7 @@ export async function googleSearch(
       try {
         // Try to save browser state even if error occurs
         if (!noSaveState) {
-          console.error(`[GoogleSearch] Saving browser state after error...`);
+          console.info(`[GoogleSearch] Saving browser state after error...`);
           const stateDir = path.dirname(stateFile);
           if (!fs.existsSync(stateDir)) {
             fs.mkdirSync(stateDir, { recursive: true });
@@ -961,7 +961,7 @@ export async function googleSearch(
               JSON.stringify(savedState, null, 2),
               "utf8"
             );
-            console.error(`[GoogleSearch] Fingerprint configuration saved after error`);
+            console.info(`[GoogleSearch] Fingerprint configuration saved after error`);
           } catch (fingerprintError) {
             console.error(`[GoogleSearch] Error saving fingerprint configuration: ${fingerprintError}`);
           }
@@ -972,10 +972,10 @@ export async function googleSearch(
 
       // Only close browser if it's not externally provided and not in debug mode
       if (!browserWasProvided && !options.debug) {
-        console.error("[GoogleSearch] Closing browser...");
+        console.info("[GoogleSearch] Closing browser...");
         await browser.close();
       } else {
-        console.error("[GoogleSearch] Keeping browser instance open");
+        console.info("[GoogleSearch] Keeping browser instance open");
       }
 
       // Create a mock search result to return some information even if error occurs
@@ -1012,7 +1012,7 @@ export async function multiGoogleSearch(
     throw new Error("At least one search query is required");
   }
 
-  console.error(`[MultiSearch] Starting multiple searches for ${queries.length} queries...`);
+  console.info(`[MultiSearch] Starting multiple searches for ${queries.length} queries...`);
   
   // Launch a single browser instance for all searches
   const browser = await chromium.launch({
@@ -1058,20 +1058,20 @@ export async function multiGoogleSearch(
             : `./browser-state-${index}.json`,
         };
         
-        console.error(`[MultiSearch] Starting search #${index + 1} for query: "${query}"`);
+        console.info(`[MultiSearch] Starting search #${index + 1} for query: "${query}"`);
         return googleSearch(query, searchOptions, browser);
       })
     );
 
-    console.error(`[MultiSearch] All searches completed successfully`);
+    console.info(`[MultiSearch] All searches completed successfully`);
     return searches;
   } finally {
     // Only close browser if not in debug mode
     if (!options.debug) {
-      console.error(`[MultiSearch] Closing main browser instance`);
+      console.info(`[MultiSearch] Closing main browser instance`);
       await browser.close();
     } else {
-      console.error(`[MultiSearch] Keeping browser instance open for debug mode`);
+      console.info(`[MultiSearch] Keeping browser instance open for debug mode`);
     }
   }
 } 

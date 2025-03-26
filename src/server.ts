@@ -19,7 +19,7 @@ export function createServer() {
   );
 
   server.setRequestHandler(ListToolsRequestSchema, async () => {
-    console.error("[Tools] List available tools");
+    console.info("[Tools] List available tools");
     return {
       tools
     };

@@ -68,13 +68,13 @@ export async function searchGoogle(args: any) {
   };
 
   // Log search parameters
-  console.error(`[SearchGoogle] Starting search for ${queries.length} queries with options: ${JSON.stringify(options)}`);
-  console.error(`[SearchGoogle] Debug mode: ${options.debug ? 'enabled' : 'disabled'} (from CLI flag: ${isDebugMode})`);
+  console.info(`[SearchGoogle] Starting search for ${queries.length} queries with options: ${JSON.stringify(options)}`);
+  console.info(`[SearchGoogle] Debug mode: ${options.debug ? 'enabled' : 'disabled'} (from CLI flag: ${isDebugMode})`);
 
   try {
     const results = await multiGoogleSearch(queries, options);
     
-    console.error(`[SearchGoogle] Search completed successfully for ${results.length} queries`);
+    console.info(`[SearchGoogle] Search completed successfully for ${results.length} queries`);
     
     // Format the response
     const response: MultiSearchResponse = {
