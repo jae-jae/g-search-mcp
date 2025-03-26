@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="icon.svg" width="120" height="120" alt="g-search-mcp Logo" />
+  <img src="https://github.com/jae-jae/g-search-mcp/raw/main/icon.svg" width="120" height="120" alt="g-search-mcp Logo" />
 </div>
 
 # G-Search MCP
