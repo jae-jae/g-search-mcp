@@ -1,0 +1,7 @@
+node_modules/
+build/
+*.log
+.env*
+browser-state.json
+browser-state-fingerprint.json
+.history/

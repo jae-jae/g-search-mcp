@@ -1,0 +1,38 @@
+{
+    "name": "g-search-mcp",
+    "version": "0.1.0",
+    "description": "MCP server for Google search using Playwright browser",
+    "private": false,
+    "type": "module",
+    "bin": {
+        "g-search-mcp": "build/index.js"
+    },
+    "files": [
+        "build"
+    ],
+    "scripts": {
+        "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
+        "prepare": "npm run build",
+        "watch": "tsc --watch",
+        "inspector": "npx @modelcontextprotocol/inspector build/index.js --debug",
+        "install-browser": "npx playwright install chromium"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^0.6.0",
+        "playwright": "^1.42.1"
+    },
+    "devDependencies": {
+        "@types/node": "^20.17.24",
+        "typescript": "^5.3.3"
+    },
+    "main": "index.js",
+    "keywords": [
+        "mcp",
+        "playwright",
+        "google-search",
+        "search-results",
+        "multi-search"
+    ],
+    "author": "",
+    "license": "ISC"
+}

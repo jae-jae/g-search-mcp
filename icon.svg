@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background Circle -->
+    <circle cx="100" cy="100" r="90" fill="#4285F4" opacity="0.1"/>
+    
+    <!-- Search Glass Handle -->
+    <path d="M125 125L160 160" stroke="#4285F4" stroke-width="12" stroke-linecap="round"/>
+    
+    <!-- Search Glass Circle -->
+    <circle cx="90" cy="90" r="50" stroke="#4285F4" stroke-width="12" fill="none"/>
+    
+    <!-- Multiple Tab Lines -->
+    <g opacity="0.7">
+        <path d="M40 60L70 60" stroke="#34A853" stroke-width="8" stroke-linecap="round"/>
+        <path d="M50 75L80 75" stroke="#FBBC05" stroke-width="8" stroke-linecap="round"/>
+        <path d="M45 90L75 90" stroke="#EA4335" stroke-width="8" stroke-linecap="round"/>
+    </g>
+</svg> 
