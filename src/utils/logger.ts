@@ -16,33 +16,32 @@ class Logger {
     }
   }
 
-  private writeToFile(level: string, message: string) {
+  private log(level: string, message: string) {
     const timestamp = new Date().toISOString();
     const logMessage = `${timestamp} [${level}] ${message}\n`;
     
-    fs.appendFileSync(this.logFile, logMessage);
+    process.stderr.write(logMessage);
     
-    // In debug mode, also output to standard error
     if (this.debugMode) {
-      process.stderr.write(logMessage);
+      fs.appendFileSync(this.logFile, logMessage);
     }
   }
 
   info(message: string) {
-    this.writeToFile('INFO', message);
+    this.log('INFO', message);
   }
 
   warn(message: string) {
-    this.writeToFile('WARN', message);
+    this.log('WARN', message);
   }
 
   error(message: string) {
-    this.writeToFile('ERROR', message);
+    this.log('ERROR', message);
   }
 
   debug(message: string) {
     if (this.debugMode) {
-      this.writeToFile('DEBUG', message);
+      this.log('DEBUG', message);
     }
   }
 }
