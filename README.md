@@ -175,4 +175,4 @@ npm run inspector
 
 ## License
 
-ISC License
+Licensed under the [MIT License](https://choosealicense.com/licenses/mit/)
