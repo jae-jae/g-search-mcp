@@ -928,8 +928,8 @@ export async function googleSearch(
         console.error(`[GoogleSearch] Error saving browser state: ${error}`);
       }
 
-      // Only close browser if it's not externally provided
-      if (!browserWasProvided) {
+      // Only close browser if it's not externally provided and not in debug mode
+      if (!browserWasProvided && !options.debug) {
         console.error("[GoogleSearch] Closing browser...");
         await browser.close();
       } else {
@@ -970,8 +970,8 @@ export async function googleSearch(
         console.error(`[GoogleSearch] Error saving browser state: ${stateError}`);
       }
 
-      // Only close browser if it's not externally provided
-      if (!browserWasProvided) {
+      // Only close browser if it's not externally provided and not in debug mode
+      if (!browserWasProvided && !options.debug) {
         console.error("[GoogleSearch] Closing browser...");
         await browser.close();
       } else {
@@ -1066,7 +1066,12 @@ export async function multiGoogleSearch(
     console.error(`[MultiSearch] All searches completed successfully`);
     return searches;
   } finally {
-    console.error(`[MultiSearch] Closing main browser instance`);
-    await browser.close();
+    // Only close browser if not in debug mode
+    if (!options.debug) {
+      console.error(`[MultiSearch] Closing main browser instance`);
+      await browser.close();
+    } else {
+      console.error(`[MultiSearch] Keeping browser instance open for debug mode`);
+    }
   }
 } 

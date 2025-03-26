@@ -5,3 +5,4 @@ build/
 browser-state.json
 browser-state-fingerprint.json
 .history/
+browser-*
