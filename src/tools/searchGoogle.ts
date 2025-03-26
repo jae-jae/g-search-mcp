@@ -6,7 +6,7 @@ import { isDebugMode } from "../index.js";
  * Tool definition for g_search
  */
 export const searchGoogleTool = {
-  name: "g_search",
+  name: "search",
   description: "Search on Google for multiple keywords and return the results",
   inputSchema: {
     type: "object",

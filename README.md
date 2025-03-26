@@ -53,7 +53,7 @@ Windows: `%APPDATA%/Claude/claude_desktop_config.json`
 
 ## Features
 
-- `g_search` - Execute Google searches with multiple keywords and return results
+- `search` - Execute Google searches with multiple keywords and return results
   - Uses Playwright browser to perform searches
   - Supports the following parameters:
     - `queries`: Array of search queries to execute (required parameter)
@@ -65,7 +65,7 @@ Windows: `%APPDATA%/Claude/claude_desktop_config.json`
 
 **Example usage**:
 ```
-Use the g_search tool to search for "machine learning" and "artificial intelligence" on Google
+Use the search tool to search for "machine learning" and "artificial intelligence" on Google
 ```
 
 **Example response**:
