@@ -175,6 +175,10 @@ npm run watch
 npm run inspector
 ```
 
+## Related Projects
+
+- [fetcher-mcp](https://github.com/jae-jae/fetcher-mcp): A powerful MCP server for fetching web page content using Playwright headless browser. Features intelligent content extraction, parallel processing, resource optimization, and more, making it an ideal tool for web content scraping.
+
 ## License
 
 Licensed under the [MIT License](https://choosealicense.com/licenses/mit/)
