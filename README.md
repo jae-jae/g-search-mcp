@@ -25,6 +25,12 @@ Run directly with npx:
 npx -y g-search-mcp
 ```
 
+First time setup - install the required browser:
+
+```bash
+npx playwright install chromium
+```
+
 ### Debug Mode
 
 Use the `--debug` option to run in debug mode (showing browser window):
