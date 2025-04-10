@@ -1,11 +1,13 @@
 class Logger {
-  private debugMode: boolean;
+  private logMode: boolean;
 
-  constructor(options: { debugMode?: boolean } = {}) {
-    this.debugMode = options.debugMode || false;
+  constructor(options: { logMode?: boolean } = {}) {
+    this.logMode = options.logMode || false;
   }
 
   private log(level: string, message: string) {
+    if (!this.logMode) return;
+    
     const timestamp = new Date().toISOString();
     const logMessage = `${timestamp} [${level}] ${message}`;
     console.error(logMessage);
@@ -24,13 +26,11 @@ class Logger {
   }
 
   debug(message: string) {
-    if (this.debugMode) {
-      this.log("DEBUG", message);
-    }
+    this.log("DEBUG", message);
   }
 }
 
 // Create default logger instance
 export const logger = new Logger({
-  debugMode: process.argv.includes("--debug"),
+  logMode: process.argv.includes("--log"),
 });

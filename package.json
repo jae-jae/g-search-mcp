@@ -1,6 +1,6 @@
 {
   "name": "g-search-mcp",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "MCP server for Google search using Playwright browser",
   "private": false,
   "type": "module",
