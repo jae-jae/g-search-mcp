@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/jae-jae-g-search-mcp-badge.png)](https://mseep.ai/app/jae-jae-g-search-mcp)
+
 <div align="center">
   <img src="https://github.com/jae-jae/g-search-mcp/raw/main/icon.svg" width="120" height="120" alt="g-search-mcp Logo" />
 </div>
