@@ -8,6 +8,8 @@ A powerful MCP server for Google search that enables parallel searching with mul
 
 > This project is modified from [google-search](https://github.com/web-agent-master/google-search).
 
+> 🌟 **Recommended**: [OllaMan](https://ollaman.com/) - Powerful Ollama AI Model Manager.
+
 ## Advantages
 
 - **Parallel Searching**: Supports searching with multiple keywords on Google simultaneously, improving search efficiency
@@ -70,11 +72,13 @@ Windows: `%APPDATA%/Claude/claude_desktop_config.json`
     - `debug`: Whether to enable debug mode (showing browser window), overrides the --debug flag in command line
 
 **Example usage**:
+
 ```
 Use the search tool to search for "machine learning" and "artificial intelligence" on Google
 ```
 
 **Example response**:
+
 ```json
 {
   "searches": [
@@ -109,10 +113,13 @@ Use the search tool to search for "machine learning" and "artificial intelligenc
 ### Handling Special Website Scenarios
 
 #### Adjusting Search Parameters
+
 - **Search Result Quantity**: For more search results:
+
   ```
   Please return the top 20 search results for each keyword
   ```
+
   This will set the `limit: 20` parameter.
 
 - **Increase Timeout Duration**: For slow loading situations:
@@ -122,6 +129,7 @@ Use the search tool to search for "machine learning" and "artificial intelligenc
   This will adjust the `timeout` parameter to 120000 milliseconds.
 
 #### Locale Settings Adjustment
+
 - **Change Search Region**: Specify a different locale setting:
   ```
   Please use Chinese locale (zh-CN) for searching
@@ -131,6 +139,7 @@ Use the search tool to search for "machine learning" and "artificial intelligenc
 ### Debugging and Troubleshooting
 
 #### Enable Debug Mode
+
 - **Dynamic Debug Activation**: To display the browser window during a specific search operation:
   ```
   Please enable debug mode for this search operation
@@ -147,22 +156,26 @@ Use the search tool to search for "machine learning" and "artificial intelligenc
 ### Install from Source
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/jae-jae/g-search-mcp.git
 cd g-search-mcp
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Install Playwright browser:
+
 ```bash
 npm run install-browser
 ```
 
 4. Build the server:
+
 ```bash
 npm run build
 ```
